@@ -1,0 +1,6 @@
+# Requirements for CSV Comparator GUI
+# Standard library only - no external dependencies needed
+
+# Optional: For better styling (uncomment if needed)
+# tkinter-tooltip>=1.2.0
+# PIL>=8.0.0  # For better image handling
