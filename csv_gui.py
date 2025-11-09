@@ -1,15 +1,12 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext
-import tkinter.font as tkfont
+from tkinter import ttk, filedialog, messagebox
 from typing import Optional
 import threading
 import os
-import pandas as pd
 from datetime import datetime
 from csv_processor_v2 import CSVProcessorV2, ComparisonResult, Config
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
             
 
 class MaterialColors:
@@ -1439,25 +1436,25 @@ class CSVComparatorGUI:
             ws['E7'].font = header_font
             ws['E7'].border = thin_border
             
-            ws['F7'] = 'UL'
+            ws['F7'] = 'UL (old)'
             ws['F7'].font = header_font
             ws['F7'].alignment = center_alignment
             ws['F7'].fill = header_fill
             ws['F7'].border = thin_border
             
-            ws['G7'] = 'LL'
+            ws['G7'] = 'LL (old)'
             ws['G7'].font = header_font
             ws['G7'].alignment = center_alignment
             ws['G7'].fill = header_fill
             ws['G7'].border = thin_border
             
-            ws['H7'] = 'UL'
+            ws['H7'] = 'UL (new)'
             ws['H7'].font = header_font
             ws['H7'].alignment = center_alignment
             ws['H7'].fill = header_fill
             ws['H7'].border = thin_border
             
-            ws['I7'] = 'LL'
+            ws['I7'] = 'LL (new)'
             ws['I7'].font = header_font
             ws['I7'].alignment = center_alignment
             ws['I7'].fill = header_fill
