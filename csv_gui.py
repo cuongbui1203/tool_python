@@ -1521,14 +1521,8 @@ class CSVComparatorGUI:
                 ws[f"E{current_row}"].border = thin_border
 
                 # Get all limit values from the data dict
-                old_ul = (
-                    param.limit.data.get("max")
-                    or param.limit.data.get("upper")
-                    or param.limit.data.get("higher", "NA")
-                )
-                old_ll = param.limit.data.get("min") or param.limit.data.get(
-                    "lower", "NA"
-                )
+                old_ul = param.limit.get_higher()
+                old_ll = param.limit.get_lower()
 
                 ws[f"F{current_row}"] = old_ul if old_ul != "NA" else "NA"
                 ws[f"F{current_row}"].alignment = center_alignment
@@ -1558,26 +1552,10 @@ class CSVComparatorGUI:
                 ws[f"E{current_row}"] = change.old.name
                 ws[f"E{current_row}"].border = thin_border
 
-                old_ul = (
-                    change.old.limit.data.get("max")
-                    or change.old.limit.data.get("upper")
-                    or change.old.limit.data.get("higher", "NA")
-                )
-                old_ll = (
-                    change.old.limit.data.get("min")
-                    or change.old.limit.data.get("lower")
-                    or change.old.limit.data.get("lower", "NA")
-                )
-                new_ul = (
-                    change.new.limit.data.get("max")
-                    or change.new.limit.data.get("upper")
-                    or change.new.limit.data.get("higher", "NA")
-                )
-                new_ll = (
-                    change.new.limit.data.get("min")
-                    or change.new.limit.data.get("lower")
-                    or change.new.limit.data.get("lower", "NA")
-                )
+                old_ul = change.old.limit.get_higher()
+                old_ll = change.old.limit.get_lower()
+                new_ul = change.new.limit.get_higher()
+                new_ll = change.new.limit.get_lower()
 
                 ws[f"F{current_row}"] = old_ul if old_ul != "NA" else "NA"
                 ws[f"F{current_row}"].alignment = center_alignment
@@ -1615,12 +1593,8 @@ class CSVComparatorGUI:
                 ws[f"G{current_row}"].alignment = center_alignment
                 ws[f"G{current_row}"].border = thin_border
 
-                new_ul = param.limit.data.get("max") or param.limit.data.get(
-                    "upper", "NA"
-                )
-                new_ll = param.limit.data.get("min") or param.limit.data.get(
-                    "lower", "NA"
-                )
+                new_ul = param.limit.get_higher()
+                new_ll = param.limit.get_lower()
 
                 ws[f"H{current_row}"] = new_ul if new_ul != "NA" else "NA"
                 ws[f"H{current_row}"].alignment = center_alignment

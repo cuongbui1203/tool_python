@@ -34,6 +34,18 @@ class LimitData:
 
         return False
 
+    def get_lower(self) -> float | str:
+        """Lấy giá trị lower limit"""
+        return self.data.get("min") or self.data.get("lower", "NA")
+
+    def get_higher(self) -> float | str:
+        """Lấy giá trị higher limit"""
+        return (
+            self.data.get("max")
+            or self.data.get("upper")
+            or self.data.get("higher", "NA")
+        )
+
 
 @dataclass
 class ParametricData:
