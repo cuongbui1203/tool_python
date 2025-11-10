@@ -7,7 +7,7 @@ from datetime import datetime
 from csv_processor_v2 import CSVProcessorV2, ComparisonResult, Config
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-            
+
 
 class MaterialColors:
     """Material Design color palette"""
@@ -128,7 +128,7 @@ class CSVComparatorGUI:
         self.file1_path = tk.StringVar()
         self.file2_path = tk.StringVar()
         self.comparison_result: Optional[ComparisonResult] = None
-        
+
         # Config variables
         self.parametric_column = tk.StringVar(value="parametric")
         self.get_columns = tk.StringVar(value="min,max")
@@ -143,42 +143,44 @@ class CSVComparatorGUI:
         """Force light mode theme for all operating systems"""
         try:
             # For Windows - disable dark mode
-            if hasattr(self.root, 'tk_setPalette'):
+            if hasattr(self.root, "tk_setPalette"):
                 self.root.tk_setPalette(
                     background=MaterialColors.BACKGROUND,
                     foreground=MaterialColors.TEXT_PRIMARY,
                     activeBackground=MaterialColors.PRIMARY_LIGHT,
-                    activeForeground="white"
+                    activeForeground="white",
                 )
-            
+
             # Set window attributes for consistent appearance
-            self.root.option_add('*TkFDialog*foreground', MaterialColors.TEXT_PRIMARY)
-            self.root.option_add('*TkFDialog*background', MaterialColors.SURFACE)
-            
+            self.root.option_add("*TkFDialog*foreground", MaterialColors.TEXT_PRIMARY)
+            self.root.option_add("*TkFDialog*background", MaterialColors.SURFACE)
+
             # Force light theme for ttk widgets
             style = ttk.Style()
-            
+
             # Available themes - prefer light themes
             available_themes = style.theme_names()
-            light_themes = ['clam', 'alt', 'default', 'classic']
-            
-            selected_theme = 'clam'  # Default fallback
+            light_themes = ["clam", "alt", "default", "classic"]
+
+            selected_theme = "clam"  # Default fallback
             for theme in light_themes:
                 if theme in available_themes:
                     selected_theme = theme
                     break
-            
+
             style.theme_use(selected_theme)
-            
+
             # Override system dark mode settings
-            self.root.tk.call('tk_setPalette', 
-                             MaterialColors.BACKGROUND,
-                             foreground=MaterialColors.TEXT_PRIMARY, # type: ignore
-                             activeBackground=MaterialColors.PRIMARY_LIGHT, # type: ignore
-                             activeForeground="white", # type: ignore
-                             selectBackground=MaterialColors.PRIMARY_LIGHT, # type: ignore
-                             selectForeground="white") # type: ignore
-                             
+            self.root.tk.call(
+                "tk_setPalette",
+                MaterialColors.BACKGROUND,
+                foreground=MaterialColors.TEXT_PRIMARY,  # type: ignore
+                activeBackground=MaterialColors.PRIMARY_LIGHT,  # type: ignore
+                activeForeground="white",  # type: ignore
+                selectBackground=MaterialColors.PRIMARY_LIGHT,  # type: ignore
+                selectForeground="white",  # type: ignore
+            )  # type: ignore
+
         except Exception as e:
             print(f"Warning: Could not force light mode: {e}")
 
@@ -187,19 +189,21 @@ class CSVComparatorGUI:
         style = ttk.Style()
 
         # Force light theme colors for all widgets
-        style.configure('.',
-                       background=MaterialColors.SURFACE,
-                       foreground=MaterialColors.TEXT_PRIMARY,
-                       fieldbackground=MaterialColors.SURFACE,
-                       selectbackground=MaterialColors.PRIMARY_LIGHT,
-                       selectforeground="white")
+        style.configure(
+            ".",
+            background=MaterialColors.SURFACE,
+            foreground=MaterialColors.TEXT_PRIMARY,
+            fieldbackground=MaterialColors.SURFACE,
+            selectbackground=MaterialColors.PRIMARY_LIGHT,
+            selectforeground="white",
+        )
 
         # Configure Notebook style
         style.configure(
-            "Material.TNotebook", 
-            background=MaterialColors.BACKGROUND, 
+            "Material.TNotebook",
+            background=MaterialColors.BACKGROUND,
             borderwidth=0,
-            tabmargins=[0, 5, 0, 0]
+            tabmargins=[0, 5, 0, 0],
         )
         style.configure(
             "Material.TNotebook.Tab",
@@ -208,16 +212,22 @@ class CSVComparatorGUI:
             padding=[20, 10],
             font=("Liberation Sans", 10),
             borderwidth=1,
-            focuscolor='none'
+            focuscolor="none",
         )
         style.map(
             "Material.TNotebook.Tab",
-            background=[("selected", MaterialColors.PRIMARY), ("active", MaterialColors.PRIMARY_LIGHT)],
+            background=[
+                ("selected", MaterialColors.PRIMARY),
+                ("active", MaterialColors.PRIMARY_LIGHT),
+            ],
             foreground=[("selected", "white"), ("active", "white")],
-            bordercolor=[("selected", MaterialColors.PRIMARY), ("active", MaterialColors.PRIMARY_LIGHT)]
+            bordercolor=[
+                ("selected", MaterialColors.PRIMARY),
+                ("active", MaterialColors.PRIMARY_LIGHT),
+            ],
         )
 
-                # Configure Treeview style for tables
+        # Configure Treeview style for tables
         style.configure(
             "Material.Treeview",
             background=MaterialColors.SURFACE,
@@ -225,7 +235,7 @@ class CSVComparatorGUI:
             fieldbackground=MaterialColors.SURFACE,
             borderwidth=0,
             font=("Liberation Sans", 10),
-            rowheight=25
+            rowheight=25,
         )
         style.configure(
             "Material.Treeview.Heading",
@@ -243,25 +253,29 @@ class CSVComparatorGUI:
         style.map(
             "Material.Treeview.Heading",
             background=[("active", MaterialColors.PRIMARY_DARK)],
-            foreground=[("active", "white")]
+            foreground=[("active", "white")],
         )
 
         # Configure Scrollbar style
-        style.configure("Material.Vertical.TScrollbar",
-                       background=MaterialColors.SURFACE,
-                       troughcolor=MaterialColors.BACKGROUND,
-                       bordercolor=MaterialColors.DIVIDER,
-                       arrowcolor=MaterialColors.TEXT_SECONDARY,
-                       darkcolor=MaterialColors.SURFACE,
-                       lightcolor=MaterialColors.SURFACE)
-        
-        style.configure("Material.Horizontal.TScrollbar",
-                       background=MaterialColors.SURFACE,
-                       troughcolor=MaterialColors.BACKGROUND,
-                       bordercolor=MaterialColors.DIVIDER,
-                       arrowcolor=MaterialColors.TEXT_SECONDARY,
-                       darkcolor=MaterialColors.SURFACE,
-                       lightcolor=MaterialColors.SURFACE)
+        style.configure(
+            "Material.Vertical.TScrollbar",
+            background=MaterialColors.SURFACE,
+            troughcolor=MaterialColors.BACKGROUND,
+            bordercolor=MaterialColors.DIVIDER,
+            arrowcolor=MaterialColors.TEXT_SECONDARY,
+            darkcolor=MaterialColors.SURFACE,
+            lightcolor=MaterialColors.SURFACE,
+        )
+
+        style.configure(
+            "Material.Horizontal.TScrollbar",
+            background=MaterialColors.SURFACE,
+            troughcolor=MaterialColors.BACKGROUND,
+            bordercolor=MaterialColors.DIVIDER,
+            arrowcolor=MaterialColors.TEXT_SECONDARY,
+            darkcolor=MaterialColors.SURFACE,
+            lightcolor=MaterialColors.SURFACE,
+        )
 
     def create_widgets(self):
         """Tạo giao diện chính"""
@@ -332,7 +346,7 @@ class CSVComparatorGUI:
             borderwidth=1,
             insertbackground=MaterialColors.TEXT_PRIMARY,
             selectbackground=MaterialColors.PRIMARY_LIGHT,
-            selectforeground="white"
+            selectforeground="white",
         )
         self.file1_entry.pack(side="left", fill="x", expand=True, padx=(0, 10))
 
@@ -368,7 +382,7 @@ class CSVComparatorGUI:
             borderwidth=1,
             insertbackground=MaterialColors.TEXT_PRIMARY,
             selectbackground=MaterialColors.PRIMARY_LIGHT,
-            selectforeground="white"
+            selectforeground="white",
         )
         self.file2_entry.pack(side="left", fill="x", expand=True, padx=(0, 10))
 
@@ -413,13 +427,13 @@ class CSVComparatorGUI:
             font=("Liberation Sans", 9),
         )
         self.status_label.pack()
-    
+
     def create_config_section(self, parent):
         """Tạo phần cấu hình nâng cao"""
         # Collapsible config section
         config_frame = tk.Frame(parent, bg=MaterialColors.SURFACE)
         config_frame.pack(fill="x", padx=16, pady=(8, 0))
-        
+
         # Toggle button for config
         self.config_visible = tk.BooleanVar(value=False)
         toggle_btn = tk.Button(
@@ -433,17 +447,17 @@ class CSVComparatorGUI:
             cursor="hand2",
             anchor="w",
             padx=10,
-            pady=5
+            pady=5,
         )
         toggle_btn.pack(fill="x")
-        
+
         # Config content frame (initially hidden)
         self.config_content = tk.Frame(config_frame, bg=MaterialColors.SURFACE)
-        
+
         # Parametric Column Name
         param_frame = tk.Frame(self.config_content, bg=MaterialColors.SURFACE)
         param_frame.pack(fill="x", pady=5)
-        
+
         tk.Label(
             param_frame,
             text="Parametric Column Name:",
@@ -451,9 +465,9 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             font=("Liberation Sans", 9),
             width=25,
-            anchor="w"
+            anchor="w",
         ).pack(side="left")
-        
+
         tk.Entry(
             param_frame,
             textvariable=self.parametric_column,
@@ -462,13 +476,13 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
-            width=30
+            width=30,
         ).pack(side="left", padx=5)
-        
+
         # Get Columns
         cols_frame = tk.Frame(self.config_content, bg=MaterialColors.SURFACE)
         cols_frame.pack(fill="x", pady=5)
-        
+
         tk.Label(
             cols_frame,
             text="Columns to Extract (comma-separated):",
@@ -476,9 +490,9 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             font=("Liberation Sans", 9),
             width=25,
-            anchor="w"
+            anchor="w",
         ).pack(side="left")
-        
+
         tk.Entry(
             cols_frame,
             textvariable=self.get_columns,
@@ -487,13 +501,13 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
-            width=30
+            width=30,
         ).pack(side="left", padx=5)
-        
+
         # Null Values
         null_frame = tk.Frame(self.config_content, bg=MaterialColors.SURFACE)
         null_frame.pack(fill="x", pady=5)
-        
+
         tk.Label(
             null_frame,
             text="Null Values (comma-separated):",
@@ -501,9 +515,9 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             font=("Liberation Sans", 9),
             width=25,
-            anchor="w"
+            anchor="w",
         ).pack(side="left")
-        
+
         tk.Entry(
             null_frame,
             textvariable=self.null_values,
@@ -512,13 +526,13 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
-            width=30
+            width=30,
         ).pack(side="left", padx=5)
-        
+
         # Key Column
         key_frame = tk.Frame(self.config_content, bg=MaterialColors.SURFACE)
         key_frame.pack(fill="x", pady=5)
-        
+
         tk.Label(
             key_frame,
             text="Key Column Name:",
@@ -526,9 +540,9 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             font=("Liberation Sans", 9),
             width=25,
-            anchor="w"
+            anchor="w",
         ).pack(side="left")
-        
+
         tk.Entry(
             key_frame,
             textvariable=self.key_column,
@@ -537,13 +551,13 @@ class CSVComparatorGUI:
             fg=MaterialColors.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
-            width=30
+            width=30,
         ).pack(side="left", padx=5)
-        
+
         # Begin from Parametric checkbox
         begin_frame = tk.Frame(self.config_content, bg=MaterialColors.SURFACE)
         begin_frame.pack(fill="x", pady=5)
-        
+
         tk.Checkbutton(
             begin_frame,
             text="Begin from Parametric Column",
@@ -553,20 +567,20 @@ class CSVComparatorGUI:
             font=("Liberation Sans", 9),
             selectcolor=MaterialColors.SURFACE,
             activebackground=MaterialColors.SURFACE,
-            activeforeground=MaterialColors.PRIMARY
+            activeforeground=MaterialColors.PRIMARY,
         ).pack(side="left")
-        
+
         # Reset button
         reset_btn_frame = tk.Frame(self.config_content, bg=MaterialColors.SURFACE)
         reset_btn_frame.pack(fill="x", pady=5)
-        
+
         MaterialButton(
             reset_btn_frame,
             text="Reset to Default",
             command=self.reset_config,
-            style="outline"
+            style="outline",
         ).pack(side="left")
-    
+
     def toggle_config(self):
         """Toggle hiển thị config section"""
         if self.config_visible.get():
@@ -575,7 +589,7 @@ class CSVComparatorGUI:
         else:
             self.config_content.pack(fill="x", pady=5)
             self.config_visible.set(True)
-    
+
     def reset_config(self):
         """Reset config về giá trị mặc định"""
         self.parametric_column.set("parametric")
@@ -736,12 +750,16 @@ class CSVComparatorGUI:
 
         # Scrollbars
         v_scrollbar = ttk.Scrollbar(
-            tree_frame, orient="vertical", command=self.new_params_table.yview,
-            style="Material.Vertical.TScrollbar"
+            tree_frame,
+            orient="vertical",
+            command=self.new_params_table.yview,
+            style="Material.Vertical.TScrollbar",
         )
         h_scrollbar = ttk.Scrollbar(
-            tree_frame, orient="horizontal", command=self.new_params_table.xview,
-            style="Material.Horizontal.TScrollbar"
+            tree_frame,
+            orient="horizontal",
+            command=self.new_params_table.xview,
+            style="Material.Horizontal.TScrollbar",
         )
 
         self.new_params_table.configure(
@@ -798,8 +816,10 @@ class CSVComparatorGUI:
 
         # Scrollbars
         v_scrollbar2 = ttk.Scrollbar(
-            tree_frame, orient="vertical", command=self.removed_params_table.yview,
-            style="Material.Vertical.TScrollbar"
+            tree_frame,
+            orient="vertical",
+            command=self.removed_params_table.yview,
+            style="Material.Vertical.TScrollbar",
         )
         self.removed_params_table.configure(yscrollcommand=v_scrollbar2.set)
 
@@ -863,12 +883,16 @@ class CSVComparatorGUI:
 
         # Scrollbars
         v_scrollbar3 = ttk.Scrollbar(
-            tree_frame, orient="vertical", command=self.changed_params_table.yview,
-            style="Material.Vertical.TScrollbar"
+            tree_frame,
+            orient="vertical",
+            command=self.changed_params_table.yview,
+            style="Material.Vertical.TScrollbar",
         )
         h_scrollbar3 = ttk.Scrollbar(
-            tree_frame, orient="horizontal", command=self.changed_params_table.xview,
-            style="Material.Horizontal.TScrollbar"
+            tree_frame,
+            orient="horizontal",
+            command=self.changed_params_table.xview,
+            style="Material.Horizontal.TScrollbar",
         )
 
         self.changed_params_table.configure(
@@ -906,9 +930,7 @@ class CSVComparatorGUI:
 
         # Disable button và hiển thị loading
         self.compare_button.config(state="disabled", text="⏳ Comparing...")
-        self.status_label.config(
-            text="Processing data...", fg=MaterialColors.WARNING
-        )
+        self.status_label.config(text="Processing data...", fg=MaterialColors.WARNING)
 
         # Chạy so sánh trong thread riêng
         thread = threading.Thread(target=self.perform_comparison, args=(file1, file2))
@@ -921,12 +943,12 @@ class CSVComparatorGUI:
             # Tạo config từ UI
             config = Config(
                 parametric_name_column=self.parametric_column.get(),
-                get_columns=self.get_columns.get().split(','),
+                get_columns=self.get_columns.get().split(","),
                 begin_from_parametric=self.begin_from_parametric.get(),
-                null_values=self.null_values.get().split(','),
-                key_column=self.key_column.get()
+                null_values=self.null_values.get().split(","),
+                key_column=self.key_column.get(),
             )
-            
+
             # So sánh files với config
             result = CSVProcessorV2.process_files(file1, file2, config)
 
@@ -952,8 +974,10 @@ class CSVComparatorGUI:
             return
 
         self.comparison_result = result
-        self.status_label.config(text="Comparison completed!", fg=MaterialColors.SUCCESS)
-        
+        self.status_label.config(
+            text="Comparison completed!", fg=MaterialColors.SUCCESS
+        )
+
         # Enable export button
         self.export_button.config(state="normal")
 
@@ -1013,8 +1037,14 @@ class CSVComparatorGUI:
                 len(result.changed_params),
             ),
             ("🔄 Total Change", total_changes),
-            (f"Qty Parametric Keys of Bundle: {result.old_version}", result.total_old_version),
-            (f"Qty Parametric Keys of Bundle: {result.new_version}", result.total_new_version),
+            (
+                f"Qty Parametric Keys of Bundle: {result.old_version}",
+                result.total_old_version,
+            ),
+            (
+                f"Qty Parametric Keys of Bundle: {result.new_version}",
+                result.total_new_version,
+            ),
         ]
 
         for category, count in stats_data:
@@ -1206,33 +1236,39 @@ class CSVComparatorGUI:
     def export_to_excel(self):
         """Export comparison results to Excel file"""
         if not self.comparison_result:
-            messagebox.showwarning("Warning", "No data to export. Please compare the files first.")
+            messagebox.showwarning(
+                "Warning", "No data to export. Please compare the files first."
+            )
             return
 
         try:
             # Ask user where to save
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             default_filename = f"CSV_Comparison_{timestamp}.xlsx"
-            
+
             filepath = filedialog.asksaveasfilename(
                 title="Save comparison results",
                 defaultextension=".xlsx",
                 initialfile=default_filename,
-                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")]
+                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")],
             )
-            
+
             if not filepath:
                 return
-            
+
             # Show progress
             self.export_button.config(state="disabled", text="⏳ Exporting...")
-            self.status_label.config(text="Creating Excel file...", fg=MaterialColors.WARNING)
+            self.status_label.config(
+                text="Creating Excel file...", fg=MaterialColors.WARNING
+            )
             print(f"Exporting to {filepath}")
             # Run export in thread
-            thread = threading.Thread(target=self.perform_excel_export, args=(filepath,))
+            thread = threading.Thread(
+                target=self.perform_excel_export, args=(filepath,)
+            )
             thread.daemon = True
             thread.start()
-            
+
         except Exception as e:
             print(f"Error occurred: {e}")
             messagebox.showerror("Error", f"Error exporting Excel file: {str(e)}")
@@ -1244,8 +1280,7 @@ class CSVComparatorGUI:
             result = self.comparison_result
             if not result:
                 raise ValueError("No comparison result to export.")
-            
-            
+
             # Create workbook
             wb = Workbook()
             ws = wb.active
@@ -1253,314 +1288,354 @@ class CSVComparatorGUI:
                 ws = wb.create_sheet()
 
             ws.title = "Comparison Report"
-            
+
             # Define styles
             header_font = Font(bold=True, color="FFFFFF", size=11)
-            header_fill = PatternFill(start_color="1F4E78", end_color="1F4E78", fill_type="solid")
-            
-            red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
-            yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-            blue_fill = PatternFill(start_color="00B0F0", end_color="00B0F0", fill_type="solid")
-            
-            center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-            left_alignment = Alignment(horizontal="left", vertical="center")
-            
-            thin_border = Border(
-                left=Side(style='thin', color='000000'),
-                right=Side(style='thin', color='000000'),
-                top=Side(style='thin', color='000000'),
-                bottom=Side(style='thin', color='000000')
+            header_fill = PatternFill(
+                start_color="1F4E78", end_color="1F4E78", fill_type="solid"
             )
-            
+
+            red_fill = PatternFill(
+                start_color="FF0000", end_color="FF0000", fill_type="solid"
+            )
+            yellow_fill = PatternFill(
+                start_color="FFFF00", end_color="FFFF00", fill_type="solid"
+            )
+            blue_fill = PatternFill(
+                start_color="00B0F0", end_color="00B0F0", fill_type="solid"
+            )
+
+            center_alignment = Alignment(
+                horizontal="center", vertical="center", wrap_text=True
+            )
+            left_alignment = Alignment(horizontal="left", vertical="center")
+
+            thin_border = Border(
+                left=Side(style="thin", color="000000"),
+                right=Side(style="thin", color="000000"),
+                top=Side(style="thin", color="000000"),
+                bottom=Side(style="thin", color="000000"),
+            )
+
             # ===== LEFT SIDE: Summary Info =====
             row = 1
-            
+
             # SW Version info
-            ws['A1'] = 'SW Version'
-            ws['A1'].font = Font(bold=True)
-            ws['A1'].alignment = center_alignment
-            ws['A1'].fill = header_fill
-            ws['A1'].font = header_font
-            ws['A1'].border = thin_border
-            
-            ws['B1'] = 'Total keys'
-            ws['B1'].font = header_font
-            ws['B1'].alignment = center_alignment
-            ws['B1'].fill = header_fill
-            ws['B1'].border = thin_border
-            
+            ws["A1"] = "SW Version"
+            ws["A1"].font = Font(bold=True)
+            ws["A1"].alignment = center_alignment
+            ws["A1"].fill = header_fill
+            ws["A1"].font = header_font
+            ws["A1"].border = thin_border
+
+            ws["B1"] = "Total keys"
+            ws["B1"].font = header_font
+            ws["B1"].alignment = center_alignment
+            ws["B1"].fill = header_fill
+            ws["B1"].border = thin_border
+
             # Old version
-            ws['A2'] = result.old_version
-            ws['A2'].alignment = center_alignment
-            ws['A2'].border = thin_border
-            ws['B2'] = result.total_old_version
-            ws['B2'].alignment = center_alignment
-            ws['B2'].border = thin_border
-            
+            ws["A2"] = result.old_version
+            ws["A2"].alignment = center_alignment
+            ws["A2"].border = thin_border
+            ws["B2"] = result.total_old_version
+            ws["B2"].alignment = center_alignment
+            ws["B2"].border = thin_border
+
             # New version
-            ws['A3'] = result.new_version
-            ws['A3'].alignment = center_alignment
-            ws['A3'].border = thin_border
-            ws['B3'] = result.total_new_version
-            ws['B3'].alignment = center_alignment
-            ws['B3'].border = thin_border
-            
+            ws["A3"] = result.new_version
+            ws["A3"].alignment = center_alignment
+            ws["A3"].border = thin_border
+            ws["B3"] = result.total_new_version
+            ws["B3"].alignment = center_alignment
+            ws["B3"].border = thin_border
+
             # Type of change table
             row = 5
-            ws[f'A{row}'] = 'Type of change'
-            ws[f'A{row}'].font = Font(bold=True)
-            ws[f'A{row}'].alignment = center_alignment
-            ws[f'A{row}'].fill = header_fill
-            ws[f'A{row}'].font = header_font
-            ws[f'A{row}'].border = thin_border
-            
-            ws[f'B{row}'] = 'Quantity'
-            ws[f'B{row}'].font = header_font
-            ws[f'B{row}'].alignment = center_alignment
-            ws[f'B{row}'].fill = header_fill
-            ws[f'B{row}'].border = thin_border
-            
+            ws[f"A{row}"] = "Type of change"
+            ws[f"A{row}"].font = Font(bold=True)
+            ws[f"A{row}"].alignment = center_alignment
+            ws[f"A{row}"].fill = header_fill
+            ws[f"A{row}"].font = header_font
+            ws[f"A{row}"].border = thin_border
+
+            ws[f"B{row}"] = "Quantity"
+            ws[f"B{row}"].font = header_font
+            ws[f"B{row}"].alignment = center_alignment
+            ws[f"B{row}"].fill = header_fill
+            ws[f"B{row}"].border = thin_border
+
             row += 1
-            ws[f'A{row}'] = 'Added Keys'
-            ws[f'A{row}'].alignment = left_alignment
-            ws[f'A{row}'].border = thin_border
-            ws[f'B{row}'] = len(result.new_params)
-            ws[f'B{row}'].alignment = center_alignment
-            ws[f'B{row}'].border = thin_border
-            
+            ws[f"A{row}"] = "Added Keys"
+            ws[f"A{row}"].alignment = left_alignment
+            ws[f"A{row}"].border = thin_border
+            ws[f"B{row}"] = len(result.new_params)
+            ws[f"B{row}"].alignment = center_alignment
+            ws[f"B{row}"].border = thin_border
+
             row += 1
-            ws[f'A{row}'] = 'Removed Keys'
-            ws[f'A{row}'].alignment = left_alignment
-            ws[f'A{row}'].border = thin_border
-            ws[f'B{row}'] = len(result.removed_params)
-            ws[f'B{row}'].alignment = center_alignment
-            ws[f'B{row}'].border = thin_border
-            
+            ws[f"A{row}"] = "Removed Keys"
+            ws[f"A{row}"].alignment = left_alignment
+            ws[f"A{row}"].border = thin_border
+            ws[f"B{row}"] = len(result.removed_params)
+            ws[f"B{row}"].alignment = center_alignment
+            ws[f"B{row}"].border = thin_border
+
             row += 1
-            ws[f'A{row}'] = 'Limits Changed Keys'
-            ws[f'A{row}'].alignment = left_alignment
-            ws[f'A{row}'].border = thin_border
-            ws[f'B{row}'] = len(result.changed_params)
-            ws[f'B{row}'].alignment = center_alignment
-            ws[f'B{row}'].border = thin_border
-            
+            ws[f"A{row}"] = "Limits Changed Keys"
+            ws[f"A{row}"].alignment = left_alignment
+            ws[f"A{row}"].border = thin_border
+            ws[f"B{row}"] = len(result.changed_params)
+            ws[f"B{row}"].alignment = center_alignment
+            ws[f"B{row}"].border = thin_border
+
             row += 1
-            ws[f'A{row}'] = 'Overlap Keys'
-            ws[f'A{row}'].alignment = left_alignment
-            ws[f'A{row}'].border = thin_border
-            ws[f'B{row}'] = len(result.overlap_params)  # Calculate if needed
-            ws[f'B{row}'].alignment = center_alignment
-            ws[f'B{row}'].border = thin_border
-            
+            ws[f"A{row}"] = "Overlap Keys"
+            ws[f"A{row}"].alignment = left_alignment
+            ws[f"A{row}"].border = thin_border
+            ws[f"B{row}"] = len(result.overlap_params)  # Calculate if needed
+            ws[f"B{row}"].alignment = center_alignment
+            ws[f"B{row}"].border = thin_border
+
             # ===== RIGHT SIDE: Comparison Details =====
             # Header row 1
-            ws['D1'] = f'Bundle {result.old_version.replace(".csv", "")} VS bundle {result.new_version.replace(".csv", "")}'
-            ws.merge_cells('D1:I1')
-            ws['D1'].font = Font(bold=True, size=12)
-            ws['D1'].alignment = center_alignment
-            ws['D1'].border = thin_border
-            
+            ws["D1"] = (
+                f'Bundle {result.old_version.replace(".csv", "")} VS bundle {result.new_version.replace(".csv", "")}'
+            )
+            ws.merge_cells("D1:I1")
+            ws["D1"].font = Font(bold=True, size=12)
+            ws["D1"].alignment = center_alignment
+            ws["D1"].border = thin_border
+
             # Product, Build, HW Info, SW Ver (rows 2-6)
-            ws['D2'] = 'Product'
-            ws['D2'].border = thin_border
-            ws['E2'] = 'Jxx'
-            ws['E2'].border = thin_border
-            ws['F2'] = ''
-            ws['F2'].border = thin_border
-            ws['G2'] = ''
-            ws['G2'].border = thin_border
-            ws['H2'] = 'Jxx'
-            ws['H2'].border = thin_border
-            ws['I2'] = ''
-            ws['I2'].border = thin_border
-            
-            ws['D3'] = 'Build'
-            ws['D3'].border = thin_border
-            ws['E3'] = ''
-            ws['E3'].border = thin_border
-            ws['F3'] = ''
-            ws['F3'].border = thin_border
-            ws['G3'] = ''
-            ws['G3'].border = thin_border
-            ws['H3'] = ''
-            ws['H3'].border = thin_border
-            ws['I3'] = ''
-            ws['I3'].border = thin_border
-            
-            ws['D4'] = 'HW Info'
-            ws['D4'].border = thin_border
-            ws['E4'] = 'Config type'
-            ws['E4'].border = thin_border
-            ws['F4'] = ''
-            ws['F4'].border = thin_border
-            ws['G4'] = ''
-            ws['G4'].border = thin_border
-            ws['H4'] = ''
-            ws['H4'].border = thin_border
-            ws['I4'] = ''
-            ws['I4'].border = thin_border
-            
-            ws['D5'] = ''
-            ws['D5'].border = thin_border
-            ws['E5'] = 'SN'
-            ws['E5'].border = thin_border
-            ws['F5'] = ''
-            ws['F5'].border = thin_border
-            ws['G5'] = ''
-            ws['G5'].border = thin_border
-            ws['H5'] = ''
-            ws['H5'].border = thin_border
-            ws['I5'] = ''
-            ws['I5'].border = thin_border
-            
-            ws['D6'] = 'SW Ver'
-            ws['D6'].border = thin_border
-            ws['E6'] = result.old_version.replace(".csv", "")
-            ws['E6'].border = thin_border
-            ws['F6'] = ''
-            ws['F6'].border = thin_border
-            ws['G6'] = ''
-            ws['G6'].border = thin_border
-            ws['H6'] = result.new_version.replace(".csv", "")
-            ws['H6'].border = thin_border
-            ws['I6'] = ''
-            ws['I6'].border = thin_border
-            
+            ws["D2"] = "Product"
+            ws["D2"].border = thin_border
+            ws["E2"] = "Jxx"
+            ws["E2"].border = thin_border
+            ws["F2"] = ""
+            ws["F2"].border = thin_border
+            ws["G2"] = ""
+            ws["G2"].border = thin_border
+            ws["H2"] = "Jxx"
+            ws["H2"].border = thin_border
+            ws["I2"] = ""
+            ws["I2"].border = thin_border
+
+            ws["D3"] = "Build"
+            ws["D3"].border = thin_border
+            ws["E3"] = ""
+            ws["E3"].border = thin_border
+            ws["F3"] = ""
+            ws["F3"].border = thin_border
+            ws["G3"] = ""
+            ws["G3"].border = thin_border
+            ws["H3"] = ""
+            ws["H3"].border = thin_border
+            ws["I3"] = ""
+            ws["I3"].border = thin_border
+
+            ws["D4"] = "HW Info"
+            ws["D4"].border = thin_border
+            ws["E4"] = "Config type"
+            ws["E4"].border = thin_border
+            ws["F4"] = ""
+            ws["F4"].border = thin_border
+            ws["G4"] = ""
+            ws["G4"].border = thin_border
+            ws["H4"] = ""
+            ws["H4"].border = thin_border
+            ws["I4"] = ""
+            ws["I4"].border = thin_border
+
+            ws["D5"] = ""
+            ws["D5"].border = thin_border
+            ws["E5"] = "SN"
+            ws["E5"].border = thin_border
+            ws["F5"] = ""
+            ws["F5"].border = thin_border
+            ws["G5"] = ""
+            ws["G5"].border = thin_border
+            ws["H5"] = ""
+            ws["H5"].border = thin_border
+            ws["I5"] = ""
+            ws["I5"].border = thin_border
+
+            ws["D6"] = "SW Ver"
+            ws["D6"].border = thin_border
+            ws["E6"] = ""
+            ws["E6"].border = thin_border
+            ws["F6"] = result.old_version.replace(".csv", "")
+            ws["F6"].border = thin_border
+            ws["G6"] = ""
+            ws["G6"].border = thin_border
+            ws["H6"] = result.new_version.replace(".csv", "")
+            ws["H6"].border = thin_border
+            ws["I6"] = ""
+            ws["I6"].border = thin_border
+
             # Result header (row 7)
-            ws['D7'] = 'Result'
-            ws['D7'].border = thin_border
-            ws['E7'] = 'Key Name'
-            ws['E7'].font = Font(bold=True)
-            ws['E7'].alignment = center_alignment
-            ws['E7'].fill = header_fill
-            ws['E7'].font = header_font
-            ws['E7'].border = thin_border
-            
-            ws['F7'] = 'UL (old)'
-            ws['F7'].font = header_font
-            ws['F7'].alignment = center_alignment
-            ws['F7'].fill = header_fill
-            ws['F7'].border = thin_border
-            
-            ws['G7'] = 'LL (old)'
-            ws['G7'].font = header_font
-            ws['G7'].alignment = center_alignment
-            ws['G7'].fill = header_fill
-            ws['G7'].border = thin_border
-            
-            ws['H7'] = 'UL (new)'
-            ws['H7'].font = header_font
-            ws['H7'].alignment = center_alignment
-            ws['H7'].fill = header_fill
-            ws['H7'].border = thin_border
-            
-            ws['I7'] = 'LL (new)'
-            ws['I7'].font = header_font
-            ws['I7'].alignment = center_alignment
-            ws['I7'].fill = header_fill
-            ws['I7'].border = thin_border
-            
+            ws["D7"] = "Result"
+            ws["D7"].border = thin_border
+            ws["E7"] = "Key Name"
+            ws["E7"].font = Font(bold=True)
+            ws["E7"].alignment = center_alignment
+            ws["E7"].fill = header_fill
+            ws["E7"].font = header_font
+            ws["E7"].border = thin_border
+
+            ws["F7"] = "Higher (old)"
+            ws["F7"].font = header_font
+            ws["F7"].alignment = center_alignment
+            ws["F7"].fill = header_fill
+            ws["F7"].border = thin_border
+
+            ws["G7"] = "Lower (old)"
+            ws["G7"].font = header_font
+            ws["G7"].alignment = center_alignment
+            ws["G7"].fill = header_fill
+            ws["G7"].border = thin_border
+
+            ws["H7"] = "Higher (new)"
+            ws["H7"].font = header_font
+            ws["H7"].alignment = center_alignment
+            ws["H7"].fill = header_fill
+            ws["H7"].border = thin_border
+
+            ws["I7"] = "Lower (new)"
+            ws["I7"].font = header_font
+            ws["I7"].alignment = center_alignment
+            ws["I7"].fill = header_fill
+            ws["I7"].border = thin_border
+
             # Data rows
             current_row = 8
-            
+
             # Removed Keys (Red)
             for param in result.removed_params:
-                ws[f'D{current_row}'] = 'Removed Keys'
-                ws[f'D{current_row}'].fill = red_fill
-                ws[f'D{current_row}'].alignment = center_alignment
-                ws[f'D{current_row}'].border = thin_border
-                
-                ws[f'E{current_row}'] = param.name
-                ws[f'E{current_row}'].border = thin_border
-                
+                ws[f"D{current_row}"] = "Removed Keys"
+                ws[f"D{current_row}"].fill = red_fill
+                ws[f"D{current_row}"].alignment = center_alignment
+                ws[f"D{current_row}"].border = thin_border
+
+                ws[f"E{current_row}"] = param.name
+                ws[f"E{current_row}"].border = thin_border
+
                 # Get all limit values from the data dict
-                old_ul = param.limit.data.get('max') or param.limit.data.get('upper', 'NA')
-                old_ll = param.limit.data.get('min') or param.limit.data.get('lower', 'NA')
-                
-                ws[f'F{current_row}'] = old_ul if old_ul != 'NA' else 'NA'
-                ws[f'F{current_row}'].alignment = center_alignment
-                ws[f'F{current_row}'].border = thin_border
-                
-                ws[f'G{current_row}'] = old_ll if old_ll != 'NA' else 'NA'
-                ws[f'G{current_row}'].alignment = center_alignment
-                ws[f'G{current_row}'].border = thin_border
-                
-                ws[f'H{current_row}'] = '/'
-                ws[f'H{current_row}'].alignment = center_alignment
-                ws[f'H{current_row}'].border = thin_border
-                
-                ws[f'I{current_row}'] = '/'
-                ws[f'I{current_row}'].alignment = center_alignment
-                ws[f'I{current_row}'].border = thin_border
-                
+                old_ul = (
+                    param.limit.data.get("max")
+                    or param.limit.data.get("upper")
+                    or param.limit.data.get("higher", "NA")
+                )
+                old_ll = param.limit.data.get("min") or param.limit.data.get(
+                    "lower", "NA"
+                )
+
+                ws[f"F{current_row}"] = old_ul if old_ul != "NA" else "NA"
+                ws[f"F{current_row}"].alignment = center_alignment
+                ws[f"F{current_row}"].border = thin_border
+
+                ws[f"G{current_row}"] = old_ll if old_ll != "NA" else "NA"
+                ws[f"G{current_row}"].alignment = center_alignment
+                ws[f"G{current_row}"].border = thin_border
+
+                ws[f"H{current_row}"] = "/"
+                ws[f"H{current_row}"].alignment = center_alignment
+                ws[f"H{current_row}"].border = thin_border
+
+                ws[f"I{current_row}"] = "/"
+                ws[f"I{current_row}"].alignment = center_alignment
+                ws[f"I{current_row}"].border = thin_border
+
                 current_row += 1
-            
+
             # Changed Keys (Yellow)
             for change in result.changed_params:
-                ws[f'D{current_row}'] = 'Limits Changed Keys'
-                ws[f'D{current_row}'].fill = yellow_fill
-                ws[f'D{current_row}'].alignment = center_alignment
-                ws[f'D{current_row}'].border = thin_border
-                
-                ws[f'E{current_row}'] = change.old.name
-                ws[f'E{current_row}'].border = thin_border
-                
-                old_ul = change.old.limit.data.get('max') or change.old.limit.data.get('upper', 'NA')
-                old_ll = change.old.limit.data.get('min') or change.old.limit.data.get('lower', 'NA')
-                new_ul = change.new.limit.data.get('max') or change.new.limit.data.get('upper', 'NA')
-                new_ll = change.new.limit.data.get('min') or change.new.limit.data.get('lower', 'NA')
-                
-                ws[f'F{current_row}'] = old_ul if old_ul != 'NA' else 'NA'
-                ws[f'F{current_row}'].alignment = center_alignment
-                ws[f'F{current_row}'].border = thin_border
-                
-                ws[f'G{current_row}'] = old_ll if old_ll != 'NA' else 'NA'
-                ws[f'G{current_row}'].alignment = center_alignment
-                ws[f'G{current_row}'].border = thin_border
-                
-                ws[f'H{current_row}'] = new_ul if new_ul != 'NA' else 'NA'
-                ws[f'H{current_row}'].alignment = center_alignment
-                ws[f'H{current_row}'].border = thin_border
-                
-                ws[f'I{current_row}'] = new_ll if new_ll != 'NA' else 'NA'
-                ws[f'I{current_row}'].alignment = center_alignment
-                ws[f'I{current_row}'].border = thin_border
-                
+                ws[f"D{current_row}"] = "Limits Changed Keys"
+                ws[f"D{current_row}"].fill = yellow_fill
+                ws[f"D{current_row}"].alignment = center_alignment
+                ws[f"D{current_row}"].border = thin_border
+
+                ws[f"E{current_row}"] = change.old.name
+                ws[f"E{current_row}"].border = thin_border
+
+                old_ul = (
+                    change.old.limit.data.get("max")
+                    or change.old.limit.data.get("upper")
+                    or change.old.limit.data.get("higher", "NA")
+                )
+                old_ll = (
+                    change.old.limit.data.get("min")
+                    or change.old.limit.data.get("lower")
+                    or change.old.limit.data.get("lower", "NA")
+                )
+                new_ul = (
+                    change.new.limit.data.get("max")
+                    or change.new.limit.data.get("upper")
+                    or change.new.limit.data.get("higher", "NA")
+                )
+                new_ll = (
+                    change.new.limit.data.get("min")
+                    or change.new.limit.data.get("lower")
+                    or change.new.limit.data.get("lower", "NA")
+                )
+
+                ws[f"F{current_row}"] = old_ul if old_ul != "NA" else "NA"
+                ws[f"F{current_row}"].alignment = center_alignment
+                ws[f"F{current_row}"].border = thin_border
+
+                ws[f"G{current_row}"] = old_ll if old_ll != "NA" else "NA"
+                ws[f"G{current_row}"].alignment = center_alignment
+                ws[f"G{current_row}"].border = thin_border
+
+                ws[f"H{current_row}"] = new_ul if new_ul != "NA" else "NA"
+                ws[f"H{current_row}"].alignment = center_alignment
+                ws[f"H{current_row}"].border = thin_border
+
+                ws[f"I{current_row}"] = new_ll if new_ll != "NA" else "NA"
+                ws[f"I{current_row}"].alignment = center_alignment
+                ws[f"I{current_row}"].border = thin_border
+
                 current_row += 1
-            
+
             # Added Keys (Blue)
             for param in result.new_params:
-                ws[f'D{current_row}'] = 'Added Keys'
-                ws[f'D{current_row}'].fill = blue_fill
-                ws[f'D{current_row}'].alignment = center_alignment
-                ws[f'D{current_row}'].border = thin_border
-                
-                ws[f'E{current_row}'] = param.name
-                ws[f'E{current_row}'].border = thin_border
-                
-                ws[f'F{current_row}'] = '/'
-                ws[f'F{current_row}'].alignment = center_alignment
-                ws[f'F{current_row}'].border = thin_border
-                
-                ws[f'G{current_row}'] = '/'
-                ws[f'G{current_row}'].alignment = center_alignment
-                ws[f'G{current_row}'].border = thin_border
-                
-                new_ul = param.limit.data.get('max') or param.limit.data.get('upper', 'NA')
-                new_ll = param.limit.data.get('min') or param.limit.data.get('lower', 'NA')
-                
-                ws[f'H{current_row}'] = new_ul if new_ul != 'NA' else 'NA'
-                ws[f'H{current_row}'].alignment = center_alignment
-                ws[f'H{current_row}'].border = thin_border
-                
-                ws[f'I{current_row}'] = new_ll if new_ll != 'NA' else 'NA'
-                ws[f'I{current_row}'].alignment = center_alignment
-                ws[f'I{current_row}'].border = thin_border
-                
+                ws[f"D{current_row}"] = "Added Keys"
+                ws[f"D{current_row}"].fill = blue_fill
+                ws[f"D{current_row}"].alignment = center_alignment
+                ws[f"D{current_row}"].border = thin_border
+
+                ws[f"E{current_row}"] = param.name
+                ws[f"E{current_row}"].border = thin_border
+
+                ws[f"F{current_row}"] = "/"
+                ws[f"F{current_row}"].alignment = center_alignment
+                ws[f"F{current_row}"].border = thin_border
+
+                ws[f"G{current_row}"] = "/"
+                ws[f"G{current_row}"].alignment = center_alignment
+                ws[f"G{current_row}"].border = thin_border
+
+                new_ul = param.limit.data.get("max") or param.limit.data.get(
+                    "upper", "NA"
+                )
+                new_ll = param.limit.data.get("min") or param.limit.data.get(
+                    "lower", "NA"
+                )
+
+                ws[f"H{current_row}"] = new_ul if new_ul != "NA" else "NA"
+                ws[f"H{current_row}"].alignment = center_alignment
+                ws[f"H{current_row}"].border = thin_border
+
+                ws[f"I{current_row}"] = new_ll if new_ll != "NA" else "NA"
+                ws[f"I{current_row}"].alignment = center_alignment
+                ws[f"I{current_row}"].border = thin_border
+
                 current_row += 1
-            
+
             # Apply borders to all cells in the used range to ensure consistent borders
-            max_row = max(current_row - 1, 9)  # At least 9 rows for the header structure
+            max_row = max(
+                current_row - 1, 9
+            )  # At least 9 rows for the header structure
             for row in range(1, max_row + 1):
                 for col in range(1, 10):  # Columns A to I
                     cell = ws.cell(row=row, column=col)
@@ -1568,43 +1643,48 @@ class CSVComparatorGUI:
                         cell.border = thin_border
                     # if cell.value is None:
                     #     cell.value = ''
-            
+
             # Add borders to empty cells in column C (gap between left and right sections)
             # for row in range(1, max_row + 1):
             #     ws[f'C{row}'] = ''
             #     ws[f'C{row}'].border = thin_border
-            
+
             # Adjust column widths
-            ws.column_dimensions['A'].width = 25
-            ws.column_dimensions['B'].width = 12
+            ws.column_dimensions["A"].width = 25
+            ws.column_dimensions["B"].width = 12
             # ws.column_dimensions['C'].width = 3
-            ws.column_dimensions['D'].width = 20
-            ws.column_dimensions['E'].width = 30
-            ws.column_dimensions['F'].width = 12
-            ws.column_dimensions['G'].width = 12
-            ws.column_dimensions['H'].width = 12
-            ws.column_dimensions['I'].width = 12
-            
+            ws.column_dimensions["D"].width = 20
+            ws.column_dimensions["E"].width = 30
+            ws.column_dimensions["F"].width = 12
+            ws.column_dimensions["G"].width = 12
+            ws.column_dimensions["H"].width = 12
+            ws.column_dimensions["I"].width = 12
+
             # Save workbook
             wb.save(filepath)
-            
+
             # Update UI in main thread
             self.root.after(0, self.excel_export_complete, filepath, None)
-            
+
         except Exception as e:
             import traceback
+
             traceback.print_exc()
             self.root.after(0, self.excel_export_complete, filepath, str(e))
 
     def excel_export_complete(self, filepath: str, error: Optional[str]):
         """Called when Excel export is complete"""
         self.export_button.config(state="normal", text="📊 Export to Excel")
-        
+
         if error:
-            self.status_label.config(text=f"Excel export error: {error}", fg=MaterialColors.ERROR)
+            self.status_label.config(
+                text=f"Excel export error: {error}", fg=MaterialColors.ERROR
+            )
             messagebox.showerror("Error", f"Error exporting Excel file: {error}")
         else:
-            self.status_label.config(text="Excel export successful!", fg=MaterialColors.SUCCESS)
+            self.status_label.config(
+                text="Excel export successful!", fg=MaterialColors.SUCCESS
+            )
             messagebox.showinfo("Success", f"Results exported to file:\n{filepath}")
 
     def run(self):
